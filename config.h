@@ -5,7 +5,7 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "Ubuntu Mono:size=13:antialias=true:autohint=true";
+static char *font = "Source Code Pro for Powerline:size=13:antialias=true:autohint=true";
 static int borderpx = 2;
 
 /*
@@ -139,7 +139,7 @@ static const char *colorname[] = {
 	"#83a598",
 	"#d3869b",
 	"#8ec07c",
-	"#ebdbb2",
+	"#fbf1c7",
 };
 
 
