@@ -5,7 +5,7 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "Ubuntu Mono:size=12:antialias=true:autohint=true";
+static char *font = "Ubuntu Mono:size=13:antialias=true:autohint=true";
 static int borderpx = 2;
 
 /*
@@ -42,7 +42,7 @@ static unsigned int tripleclicktimeout = 600;
 int allowaltscreen = 1;
 
 /* frames per second st should at maximum draw to the screen */
-static unsigned int xfps = 120;
+static unsigned int xfps = 50;
 static unsigned int actionfps = 30;
 
 /*

@@ -253,6 +253,7 @@ static char *opt_name  = NULL;
 static char *opt_title = NULL;
 
 static int oldbutton = 3; /* button event on startup: 3 = release */
+static int bellon = 0;    /* visual bell status */
 
 void
 clipcopy(const Arg *dummy)
@@ -1717,6 +1718,15 @@ xbell(void)
 		xseturgency(1);
 	if (bellvolume)
 		XkbBell(xw.dpy, xw.win, bellvolume, (Atom)NULL);
+
+	/* visual bell*/
+	if (!bellon) {
+		bellon = 1;
+		MODBIT(win.mode, !IS_SET(MODE_REVERSE), MODE_REVERSE);
+		redraw();
+		XFlush(xw.dpy);
+		MODBIT(win.mode, !IS_SET(MODE_REVERSE), MODE_REVERSE);
+	}
 }
 
 void
@@ -1959,6 +1969,32 @@ run(void)
 				tsetdirtattr(ATTR_BLINK);
 				lastblink = now;
 				timeout = blinktimeout;
+			if (bellon) {
+				bellon = 0;
+				redraw();
+			}
+			else draw();
+			XFlush(xw.dpy);
+
+			if (xev && !FD_ISSET(xfd, &rfd))
+				xev--;
+			if (!FD_ISSET(ttyfd, &rfd) && !FD_ISSET(xfd, &rfd)) {
+				if (blinkset) {
+					if (TIMEDIFF(now, lastblink) \
+							> blinktimeout) {
+						drawtimeout.tv_nsec = 1000;
+					} else {
+						drawtimeout.tv_nsec = (1E6 * \
+							(blinktimeout - \
+							TIMEDIFF(now,
+								lastblink)));
+					}
+					drawtimeout.tv_sec = \
+					    drawtimeout.tv_nsec / 1E9;
+					drawtimeout.tv_nsec %= (long)1E9;
+				} else {
+					tv = NULL;
+				}
 			}
 		}
 
